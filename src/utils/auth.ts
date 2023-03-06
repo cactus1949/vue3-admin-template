@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-const TokenKey = 'vue3-element-admin-token';
+const TokenKey = 'xhs_token';
 
 export function getToken() {
   return Cookies.get(TokenKey);

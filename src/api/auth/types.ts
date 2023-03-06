@@ -4,21 +4,17 @@
 export interface LoginData {
   username: string;
   password: string;
-  /**
-   * 验证码Code
-   */
-  //verifyCode: string;
-  /**
-   * 验证码Code服务端缓存key(UUID)
-   */
-  // verifyCodeKey: string;
+  ip: string;
+  loginTime: string;
+  mobileOrPc: number;
+  userAgent: string;
 }
 
 /**
  * Token响应类型
  */
 export interface TokenResult {
-  accessToken: string;
+  token: string;
   refreshToken: string;
   expires: number;
 }

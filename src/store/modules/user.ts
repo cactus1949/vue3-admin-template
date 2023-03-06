@@ -6,27 +6,37 @@ import { getUserInfo } from '@/api/user';
 import { resetRouter } from '@/router';
 import { store } from '@/store';
 import { LoginData } from '@/api/auth/types';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { UserInfo } from '@/api/user/types';
 
 export const useUserStore = defineStore('user', () => {
+  const userInfoInit:UserInfo = {
+    userName: '',
+    roleName: '',
+    branchId: '',
+    branchName: '',
+    email: '',
+    id: '',
+    roleId: '',
+    areas: [],
+    countrys: []
+  }
   // state
   const token = ref<string>(getToken() || '');
-  const nickname = ref<string>('');
-  const avatar = ref<string>('');
-  const roles = ref<Array<string>>([]); // 用户角色编码集合 → 判断路由权限
-  const perms = ref<Array<string>>([]); // 用户权限编码集合 → 判断按钮权限
+  let userInfo = reactive<UserInfo>({
+    ...userInfoInit
+  });
+
 
   // actions
-
   // 登录
   function login(loginData: LoginData) {
     return new Promise<void>((resolve, reject) => {
       loginApi(loginData)
         .then(response => {
-          const { accessToken } = response.data;
-          token.value = accessToken;
-          setToken(accessToken);
+          const { token } = response.data;
+          setToken(token);
+          console.log('登录成功',getToken())
           resolve();
         })
         .catch(error => {
@@ -35,21 +45,37 @@ export const useUserStore = defineStore('user', () => {
     });
   }
 
-  // 获取信息(用户昵称、头像、角色集合、权限集合)
+  // 获取信息(用户名 用户等级 区域 分社 国家...)
   function getInfo() {
+    console.log('getInfo start')
     return new Promise<UserInfo>((resolve, reject) => {
       getUserInfo()
         .then(({ data }) => {
+          console.log('getUserInfo: ',data)
           if (!data) {
             return reject('Verification failed, please Login again.');
           }
-          if (!data.roles || data.roles.length <= 0) {
-            reject('getUserInfo: roles must be a non-null array!');
-          }
-          nickname.value = data.nickname;
-          avatar.value = data.avatar;
-          roles.value = data.roles;
-          perms.value = data.perms;
+          const {
+            areas,
+            branchId,
+            branchName,
+            userName,
+            roleName,
+            email,
+            id,
+            roleId,
+            countrys,
+            createTime,
+            password
+          } = data;
+          userInfo.areas = areas;
+          userInfo.branchId = branchId;
+          userInfo.branchName = branchName;
+          userInfo.userName = userName;
+          userInfo.roleName = roleName;
+          userInfo.roleId = roleId;
+          userInfo.countrys = countrys;
+          userInfo.id = id;
           resolve(data);
         })
         .catch(error => {
@@ -77,17 +103,11 @@ export const useUserStore = defineStore('user', () => {
   function resetToken() {
     removeToken();
     token.value = '';
-    nickname.value = '';
-    avatar.value = '';
-    roles.value = [];
-    perms.value = [];
+    userInfo = { ...userInfoInit }
   }
   return {
     token,
-    nickname,
-    avatar,
-    roles,
-    perms,
+    userInfo,
     login,
     getInfo,
     logout,

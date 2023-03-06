@@ -2,7 +2,6 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { getToken } from '@/utils/auth';
 import { useUserStoreHook } from '@/store/modules/user';
-
 // 创建 axios 实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
@@ -18,9 +17,10 @@ service.interceptors.request.use(
         `Expected 'config' and 'config.headers' not to be undefined`
       );
     }
-    const user = useUserStoreHook();
-    if (user.token) {
-      (config.headers as any).Authorization = getToken();
+    // const user = useUserStoreHook();
+    const token = getToken()
+    if (token) {
+      (config.headers as any).token = token;
     }
     return config;
   },
@@ -32,8 +32,9 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    const { code, msg } = response.data;
-    if (code === '00000') {
+    console.log(response.data)
+    const { code, message } = response.data;
+    if (code === 200) {
       return response.data;
     } else {
       // 响应数据为二进制流处理(Excel导出)
@@ -42,17 +43,17 @@ service.interceptors.response.use(
       }
 
       ElMessage({
-        message: msg || '系统出错',
+        message: message || '系统出错',
         type: 'error'
       });
-      return Promise.reject(new Error(msg || 'Error'));
+      return Promise.reject(new Error(message || 'Error'));
     }
   },
   (error: any) => {
     if (error.response.data) {
-      const { code, msg } = error.response.data;
+      const { code, message } = error.response.data;
       // token 过期,重新登录
-      if (code === 'A0230') {
+      if (code === 401) {
         ElMessageBox.confirm('当前页面已失效，请重新登录', '提示', {
           confirmButtonText: 'OK',
           type: 'warning'
@@ -62,7 +63,7 @@ service.interceptors.response.use(
         });
       } else {
         ElMessage({
-          message: msg || '系统出错',
+          message: message || '系统出错',
           type: 'error'
         });
       }

@@ -19,7 +19,7 @@
         </span>
         <el-input
           ref="username"
-          v-model="loginData.username"
+          v-model.trim="loginData.username"
           :placeholder="$t('login.username')"
           name="username"
           type="text"
@@ -40,7 +40,7 @@
           <el-input
             ref="passwordRef"
             :key="passwordType"
-            v-model="loginData.password"
+            v-model.trim="loginData.password"
             :type="passwordType"
             placeholder="Password"
             name="password"
@@ -71,9 +71,9 @@
       <div class="tips">
         <div style="position: relative">
           <span style="margin-right: 20px"
-            >{{ $t('login.username') }}: admin</span
+            >{{ $t('login.username') }}: one</span
           >
-          <span> {{ $t('login.password') }}: 123456</span>
+          <span> {{ $t('login.password') }}: wjy123</span>
         </div>
       </div>
     </el-form>
@@ -89,10 +89,12 @@
 import { onMounted, reactive, ref, toRefs, watch, nextTick } from 'vue';
 
 // 组件依赖
-import { ElForm, ElInput } from 'element-plus';
+import { ElForm, ElInput, ElMessage } from 'element-plus';
 import router from '@/router';
 import LangSelect from '@/components/LangSelect/index.vue';
 import SvgIcon from '@/components/SvgIcon/index.vue';
+import { sha256 } from 'js-sha256'
+import _ from 'lodash'
 
 // 状态管理依赖
 import { useUserStore } from '@/store/modules/user';
@@ -108,10 +110,14 @@ const loginFormRef = ref(ElForm);
 const passwordRef = ref(ElInput);
 
 const state = reactive({
-  redirect: '',
+  redirect: '/',
   loginData: {
-    username: 'admin',
-    password: '123456'
+    username: 'one',
+    password: 'wjy123',
+    ip: '127.0.0.1',
+    loginTime: '2000-01-01 00:00:00',
+    userAgent: 'chrome',
+    mobileOrPc: 1
   } as LoginData,
   loginRules: {
     username: [{ required: true, trigger: 'blur' }],
@@ -168,9 +174,15 @@ function handleLogin() {
   loginFormRef.value.validate((valid: boolean) => {
     if (valid) {
       state.loading = true;
+      let payload:LoginData = reactive({...state.loginData})
+      payload.password = sha256(payload.password)
       userStore
-        .login(state.loginData)
+        .login(payload)
         .then(() => {
+          ElMessage({
+            message: '登录成功',
+            type: 'success'
+          });
           router.push({ path: state.redirect || '/', query: state.otherQuery });
           state.loading = false;
         })

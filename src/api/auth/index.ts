@@ -9,9 +9,9 @@ import { LoginData, TokenResult, VerifyCode } from './types';
  */
 export function loginApi(data: LoginData): AxiosPromise<TokenResult> {
   return request({
-    url: '/api/v1/auth/login',
+    url: '/login',
     method: 'post',
-    params: data
+    data
   });
 }
 
@@ -20,8 +20,8 @@ export function loginApi(data: LoginData): AxiosPromise<TokenResult> {
  */
 export function logoutApi() {
   return request({
-    url: '/api/v1/auth/logout',
-    method: 'delete'
+    url: '/logout',
+    method: 'post'
   });
 }
 

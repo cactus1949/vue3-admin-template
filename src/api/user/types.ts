@@ -2,11 +2,52 @@
  * 登录用户信息
  */
 export interface UserInfo {
-  nickname: string;
-  avatar: string;
-  roles: string[];
-  perms: string[];
+  userName: string;
+  roleName: string;
+  branchId: string;
+  branchName: string;
+  email: string;
+  id: string;
+  roleId: string;
+  areas: AreaInfo[];
+	countrys: CountryInfo[];
+	createTime?: any;
+  password?: string;
 }
+
+/**
+ * 用户区域 信息
+ */
+export interface AreaInfo {
+	areaId: string;
+	areaName: string;
+	countryId?: any;
+	countryName: string;
+	createTime: string;
+	id: string;
+	isDelete: boolean;
+	operateUserId?: any;
+	roleCode: string;
+	updateTime: string;
+	userId: string;
+}
+/**
+ * 用户国家 信息
+ */
+export interface CountryInfo {
+	areaId: string;
+	areaName: string;
+	countryId: string;
+	countryName: string;
+	createTime: string;
+	id: string;
+	isDelete: boolean;
+	operateUserId?: any;
+	roleCode: string;
+	updateTime: string;
+	userId: string;
+}
+
 
 /**
  * 用户查询参数
