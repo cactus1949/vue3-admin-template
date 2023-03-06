@@ -11,5 +11,13 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <!-- get client ip -->
+    <script type="text/javascript" src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script type="text/javascript">
+      const Ip=returnCitySN['cip']
+      const cityname=returnCitySN['cname']
+      localStorage.setItem('Ip', Ip)
+      localStorage.setItem('cityname', cityname)
+    </script>
   </body>
 </html>

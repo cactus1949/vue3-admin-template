@@ -95,6 +95,8 @@ import LangSelect from '@/components/LangSelect/index.vue';
 import SvgIcon from '@/components/SvgIcon/index.vue';
 import { sha256 } from 'js-sha256'
 import _ from 'lodash'
+import moment from 'moment';
+import { GetCurrentBrowser } from '@/utils/systemTool';
 
 // 状态管理依赖
 import { useUserStore } from '@/store/modules/user';
@@ -114,8 +116,8 @@ const state = reactive({
   loginData: {
     username: 'one',
     password: 'wjy123',
-    ip: '127.0.0.1',
-    loginTime: '2000-01-01 00:00:00',
+    ip: '',
+    loginTime: '',
     userAgent: 'chrome',
     mobileOrPc: 1
   } as LoginData,
@@ -176,6 +178,9 @@ function handleLogin() {
       state.loading = true;
       let payload:LoginData = reactive({...state.loginData})
       payload.password = sha256(payload.password)
+      payload.userAgent = GetCurrentBrowser()
+      payload.ip = localStorage.getItem('Ip')
+      payload.loginTime = moment().format('YYYY-MM-DD HH:mm:ss')
       userStore
         .login(payload)
         .then(() => {

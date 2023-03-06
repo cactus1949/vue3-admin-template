@@ -10,7 +10,9 @@ import { ref, reactive } from 'vue';
 import { UserInfo } from '@/api/user/types';
 
 export const useUserStore = defineStore('user', () => {
-  const userInfoInit:UserInfo = {
+  // state
+  const token = ref<string>(getToken() || '');
+  const userInfo = reactive<UserInfo>({
     userName: '',
     roleName: '',
     branchId: '',
@@ -20,11 +22,6 @@ export const useUserStore = defineStore('user', () => {
     roleId: '',
     areas: [],
     countrys: []
-  }
-  // state
-  const token = ref<string>(getToken() || '');
-  let userInfo = reactive<UserInfo>({
-    ...userInfoInit
   });
 
 
@@ -34,8 +31,9 @@ export const useUserStore = defineStore('user', () => {
     return new Promise<void>((resolve, reject) => {
       loginApi(loginData)
         .then(response => {
-          const { token } = response.data;
-          setToken(token);
+          const { token: accessToken } = response.data;
+          token.value = accessToken
+          setToken(accessToken);
           console.log('登录成功',getToken())
           resolve();
         })
@@ -103,8 +101,18 @@ export const useUserStore = defineStore('user', () => {
   function resetToken() {
     removeToken();
     token.value = '';
-    userInfo = { ...userInfoInit }
+    userInfo.userName = ''
+    userInfo.roleName = ''
+    userInfo.branchId = ''
+    userInfo.branchName = ''
+    userInfo.email = ''
+    userInfo.id = ''
+    userInfo.roleId = ''
+    userInfo.areas = []
+    userInfo.countrys = []
   }
+
+  
   return {
     token,
     userInfo,

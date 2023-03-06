@@ -4,7 +4,7 @@
 export interface LoginData {
   username: string;
   password: string;
-  ip: string;
+  ip: string | null;
   loginTime: string;
   mobileOrPc: number;
   userAgent: string;
