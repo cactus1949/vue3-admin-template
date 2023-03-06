@@ -17,14 +17,12 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start();
   const hasToken = getToken()
   const userStore = useUserStoreHook()
-  console.log('router beforeEach strart')
   if (hasToken) {
     // 登录成功，跳转到首页
     if (to.path === '/login') {
       next({ path: '/' });
       NProgress.done();
     } else {
-      console.log('userStore: ',userStore.userInfo)
       const hasUserInfo = userStore.userInfo.id !== ''
       if (hasUserInfo) {
         if (to.matched.length === 0) {
@@ -35,7 +33,6 @@ router.beforeEach(async (to, from, next) => {
       } else {
         // try {
           const res = await userStore.getInfo();
-          console.log('noUserInfo to get:',res)
           next()
         //   const accessRoutes: RouteRecordRaw[] =
         //     await permissionStore.generateRoutes(roles);
@@ -52,7 +49,6 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    console.log('无token')
     // 未登录可以访问白名单页面
     if (whiteList.indexOf(to.path) !== -1) {
       next();

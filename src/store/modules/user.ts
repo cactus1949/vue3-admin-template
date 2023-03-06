@@ -34,7 +34,6 @@ export const useUserStore = defineStore('user', () => {
           const { token: accessToken } = response.data;
           token.value = accessToken
           setToken(accessToken);
-          console.log('登录成功',getToken())
           resolve();
         })
         .catch(error => {
@@ -45,11 +44,9 @@ export const useUserStore = defineStore('user', () => {
 
   // 获取信息(用户名 用户等级 区域 分社 国家...)
   function getInfo() {
-    console.log('getInfo start')
     return new Promise<UserInfo>((resolve, reject) => {
       getUserInfo()
         .then(({ data }) => {
-          console.log('getUserInfo: ',data)
           if (!data) {
             return reject('Verification failed, please Login again.');
           }
@@ -112,7 +109,7 @@ export const useUserStore = defineStore('user', () => {
     userInfo.countrys = []
   }
 
-  
+
   return {
     token,
     userInfo,
