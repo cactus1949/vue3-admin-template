@@ -49,6 +49,7 @@
   display: table-cell !important;
 }
 
+// el-input
 .el-input{
   height: 28px;
   .is-focus{
@@ -66,4 +67,99 @@
       color: $fontAidsColor;
     }
   }
+}
+
+
+// 面包屑
+.el-breadcrumb{
+  .el-breadcrumb__inner a, 
+  .el-breadcrumb__inner.is-link{
+    color: #FFFFFF;
+    &:hover{
+      // color: $fontLinkColor;
+    }
+  }
+}
+
+// el-tabs
+.el-tabs{
+  .el-tabs__header{
+    .el-tabs__nav-wrap::after {
+      height: 0px;
+    }
+    .el-tabs__nav-scroll{
+      padding-left: 18px;
+      padding: 24px 0 0 18px;
+      .el-tabs__active-bar{
+        background-color: $fontLinkColor;
+      }
+      .el-tabs__item{
+        font-size: $fontNormalSize;
+        &:hover{
+          color: $fontLinkColor;
+        }
+      }
+      .el-tabs__item.is-active{
+        color: $fontLinkColor;
+      }
+    }
+  }
+}
+
+// el-table
+.el-table{
+  .el-table__header,
+  .el-table__row{
+    height: 64px;
+  }
+  .el-table__row td{
+    background-color: #F9FAFD !important;
+  }
+  .el-table__row.el-table__row--striped td{
+    background: #FFFFFF !important;
+  }
+}
+
+
+// el-button
+// 搜索
+.el-button--search.is-active,
+.el-button--search:active {
+  background-color: $fontLinkColor!important;
+  border-color: $fontLinkColor!important;
+  color: #fff;
+}
+
+.el-button--search:focus,
+.el-button--search:hover {
+  background-color: $fontLinkColor!important;
+  border-color: $fontLinkColor!important;
+  color: #fff;
+}
+
+.el-button--search {
+  color: #FFF!important;
+  background-color: $fontLinkColor!important;
+  border-color: $fontLinkColor!important;
+}
+
+// 重置
+.el-button--reset.is-active,
+.el-button--reset:active {
+  background-color: #FFF!important;
+  border-color: $fontLinkColor!important;
+  color: $fontLinkColor!important;
+}
+
+.el-button--reset:focus,
+.el-button--reset:hover {
+  background-color: #FFF!important;
+  border-color: $fontLinkColor!important;
+  color: $fontLinkColor!important;
+}
+
+.el-button--reset {
+  color: $fontLinkColor!important;
+  background-color: #FFF!important;
+  border-color: $fontLinkColor!important;
 }

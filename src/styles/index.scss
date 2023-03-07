@@ -9,7 +9,7 @@ html,body,#app{
 
 // main-container global css
 .app-container {
-  padding: 20px;
+  padding: 0 70px;
 }
 
 .search{
@@ -32,5 +32,13 @@ svg{
     .svg-icon{
       font-size: $fontOneSize;
     }
+  }
+}
+
+// 表格页 筛选按钮
+.search-btns{
+  .el-button{
+    height: 28px!important;
+    font-size: $fontSmallSize!important;
   }
 }

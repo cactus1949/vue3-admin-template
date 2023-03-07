@@ -3,6 +3,10 @@ declare global {
     pageNum: number;
     pageSize: number;
   }
+  type TabItem<T> = {
+    label: T;
+    name: string | number;
+  }
 
   interface PageResult<T> {
     list: T;

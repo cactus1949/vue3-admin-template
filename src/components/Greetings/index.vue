@@ -68,6 +68,8 @@ const getCurrentImageUrl = ():string => {
   display: flex;
   align-items: center;
   .greetings-context-wrap{
+    text-align: right;
+    margin-right: 24px;
     .greetings-context{
       &-1{
         font-size: $fontTwoSize;
@@ -75,6 +77,7 @@ const getCurrentImageUrl = ():string => {
       }
       &-2{
         font-size: $fontNormalSize;
+        color: #9C9BAE;
       }
     }
   }

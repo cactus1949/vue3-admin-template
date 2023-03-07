@@ -55,16 +55,11 @@ const device = computed(() => appStore.device);
   font-size: 18px;
 }
 .navbar {
-  // height: 50px;
-  padding: 54px 70px 27px;
+  padding: 54px 70px 20px;
   height: $navBarHeight;
-  // z-index: 9999;
-  // width: calc(100vw - $sideBarWidth);
   background-color: $mainBgColor;
-  // position: fixed;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2);
 }
 </style>
