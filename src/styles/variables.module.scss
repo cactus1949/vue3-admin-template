@@ -29,6 +29,8 @@ $fontOneColor: #61647C;
 $fontNormalColor: #8892B1;
 $fontAidsColor: #B7C1DF;
 $fontLinkColor: #3661EC;
+$inputDefaultFontColor: #0E1050;
+$inputErrorFontColor: #E74E4E;
 
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
@@ -56,5 +58,7 @@ $fontLinkColor: #3661EC;
   fontNormalColor: $fontNormalColor;
   fontAidsColor: $fontAidsColor;
   fontLinkColor: $fontLinkColor;
+  inputDefaultFontColor: $inputDefaultFontColor;
+  inputErrorFontColor: $inputErrorFontColor;
   
 }

@@ -16,8 +16,23 @@ const appStore = useAppStore();
 <template>
   <el-input
     v-model="keyword"
-    class="w-50 m-2"
-    placeholder="Type something"
+    placeholder="搜索相关内容"
     :prefix-icon="Search"
   />
 </template>
+
+<style lang="scss" scoped>
+@import '@/styles/variables.module.scss';
+::v-deep.el-input{
+  height: 48px;
+  width: 413px;
+  .el-input__wrapper{
+    border-radius: 24px; 
+    background: #F9FBFF;
+    box-shadow: none;
+    .el-input__inner{
+      font-size: $fontNormalSize;
+    }
+  }
+}
+</style>

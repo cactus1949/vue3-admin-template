@@ -1,7 +1,9 @@
+
 :root {
   // 这里可以设置你自定义的颜色变量
   // 这个是element主要按钮:active的颜色，当主题更改后此变量的值也随之更改
-  --el-color-primary-dark: #0d84ff;
+  --el-color-primary-dark: #3661EC;
+  --el-input-focus-border-color: #AEBBC6;
 }
 
 // 覆盖 element-plus 的样式
@@ -47,4 +49,21 @@
   display: table-cell !important;
 }
 
-
+.el-input{
+  height: 28px;
+  .is-focus{
+    box-shadow: 0 0 0 1px #AEBBC6 inset!important;
+  }
+  .el-input__wrapper{
+    &:hover{
+      box-shadow: 0 0 0 1px #AEBBC6 inset!important;
+    }
+  }
+  .el-input__inner{
+    font-size: $fontSmallSize;
+    color: $inputDefaultFontColor;
+    &::placeholder{
+      color: $fontAidsColor;
+    }
+  }
+}

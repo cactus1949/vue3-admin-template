@@ -24,7 +24,7 @@ function handleLanguageChange(lang: string) {
     trigger="click"
     @command="handleLanguageChange"
   >
-    <div class="cursor-pointer w-[40px] h-[50px] leading-[50px] text-center">
+    <div class="cursor-pointer ml-[30px] h-[48px] leading-[48px] text-center">
       <svg-icon class-name="international-icon" icon-class="language" />
     </div>
     <template #dropdown>

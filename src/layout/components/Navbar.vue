@@ -35,12 +35,13 @@ const device = computed(() => appStore.device);
   <div class="navbar">
     <div
       v-if="settingsStore.layout === 'left'"
-      class="w-[100%] flex justify-between"
+      class="w-[100%] flex justify-between items-center"
     >
       <div class="flex">
         <!-- 大搜索 -->
         <big-search />
         <!-- 语言选择 -->
+        <lang-select />
         <lang-select />
       </div>
       <greetings />
@@ -55,7 +56,7 @@ const device = computed(() => appStore.device);
 }
 .navbar {
   // height: 50px;
-  padding: 0 70px;
+  padding: 54px 70px 27px;
   height: $navBarHeight;
   // z-index: 9999;
   // width: calc(100vw - $sideBarWidth);
