@@ -3,7 +3,9 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 import SidebarItem from './SidebarItem.vue';
+import UserPanel from './UserPanel.vue'
 import Logo from './Logo.vue';
+import loginout from './logout.vue'
 import variables from '@/styles/variables.module.scss';
 
 import { useSettingsStore } from '@/store/modules/settings';
@@ -30,8 +32,9 @@ const activeMenu = computed<string>(() => {
 </script>
 
 <template>
-  <div :class="{ 'has-logo': sidebarLogo }">
-    <logo v-if="sidebarLogo" :collapse="isCollapse" />
+  <div class="sidebar-container">
+    <UserPanel />
+    <!-- <logo v-if="sidebarLogo" :collapse="isCollapse" /> -->
     <el-scrollbar>
       <el-menu
         :default-active="activeMenu"
@@ -52,5 +55,13 @@ const activeMenu = computed<string>(() => {
         />
       </el-menu>
     </el-scrollbar>
+    <loginout/>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.sidebar-container{
+  position: relative;
+}
+</style>
+

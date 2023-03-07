@@ -36,12 +36,112 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index.vue'),
         name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'homepage', affix: true }
+        meta: { title: '首页', icon: 'homepage', affix: true }
       },
       {
         path: '401',
         component: () => import('@/views/error-page/401.vue'),
         meta: { hidden: true }
+      }
+    ]
+  },
+  {
+    path: '/exchangeForum',
+    component: Layout,
+    redirect: "/exchangeForum/index",
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/exchangeForum/index.vue'),
+        name: 'ExchangeForum',
+        "meta": {
+          "title": "通知公告",
+          "icon": "user",
+          "hidden": false,
+          "alwaysShow": false,
+          "roles": ["L1","L2","L3","L4"],
+          "keepAlive": true
+        }
+      }
+    ]
+  },
+  {
+    path: '/salesProcess',
+    component: Layout,
+    redirect: "/salesProcess/index",
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/salesProcess/index.vue'),
+        name: 'SalesProcess',
+        "meta": {
+          "title": "销售流程",
+          "icon": "user",
+          "hidden": false,
+          "alwaysShow": false,
+          "roles": ["L1","L2","L3","L4"],
+          "keepAlive": true
+        }
+      }
+    ]
+  },
+  {
+    path: '/customerInformation',
+    component: Layout,
+    redirect: "/customerInformation/index",
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/customerInformation/index.vue'),
+        name: 'CustomerInformation',
+        "meta": {
+          "title": "客户信息",
+          "icon": "user",
+          "hidden": false,
+          "alwaysShow": false,
+          "roles": ["L1","L2","L3","L4"],
+          "keepAlive": true
+        }
+      }
+    ]
+  },
+  {
+    path: '/contactInformation',
+    component: Layout,
+    redirect: "/contactInformation/index",
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/contactInformation/index.vue'),
+        name: 'ContactInformation',
+        "meta": {
+          "title": "联系人信息",
+          "icon": "user",
+          "hidden": false,
+          "alwaysShow": false,
+          "roles": ["L1","L2","L3","L4"],
+          "keepAlive": true
+        }
+      }
+    ]
+  },
+  {
+    path: '/adoptingInformation',
+    component: Layout,
+    redirect: "/adoptingInformation/index",
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/adoptingInformation/index.vue'),
+        name: 'AdoptingInformation',
+        "meta": {
+          "title": "采用信息",
+          "icon": "user",
+          "hidden": false,
+          "alwaysShow": false,
+          "roles": ["L1","L2","L3","L4"],
+          "keepAlive": true
+        }
       }
     ]
   }

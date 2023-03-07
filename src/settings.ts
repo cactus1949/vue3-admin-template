@@ -10,11 +10,11 @@ interface DefaultSettings {
 }
 
 const defaultSettings: DefaultSettings = {
-  title: 'vue3-element-admin',
-  showSettings: true,
-  tagsView: true,
+  title: '海外用户关系管理系统',
+  showSettings: false,
+  tagsView: false,
   fixedHeader: false,
-  sidebarLogo: true,
+  sidebarLogo: false,
   errorLog: 'production',
   layout: 'left',
   theme: 'light'

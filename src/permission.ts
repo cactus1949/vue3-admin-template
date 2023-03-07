@@ -32,14 +32,13 @@ router.beforeEach(async (to, from, next) => {
         }
       } else {
         // try {
-          const res = await userStore.getInfo();
-          next()
-        //   const accessRoutes: RouteRecordRaw[] =
-        //     await permissionStore.generateRoutes(roles);
-        //   accessRoutes.forEach((route: any) => {
-        //     router.addRoute(route);
-        //   });
-        //   next({ ...to, replace: true });
+          const { roleName } = await userStore.getInfo();
+          const accessRoutes: RouteRecordRaw[] =
+            await permissionStore.generateRoutes(roleName);
+          accessRoutes.forEach((route: any) => {
+            router.addRoute(route);
+          });
+          next({ ...to, replace: true });
         // } catch (error) {
         //   // 移除 token 并跳转登录页
         //   await userStore.resetToken();

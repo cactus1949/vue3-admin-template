@@ -23,3 +23,14 @@ html,body,#app{
 svg{
   display: inline-block;
 }
+
+// sidebar
+.sidebar-container{
+  .el-menu-item{
+    font-size: $fontNormalSize;
+    padding-left: 70px!important;
+    .svg-icon{
+      font-size: $fontOneSize;
+    }
+  }
+}

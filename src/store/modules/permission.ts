@@ -8,25 +8,20 @@ import { ref } from 'vue';
 const modules = import.meta.glob('../../views/**/**.vue');
 export const Layout = () => import('@/layout/index.vue');
 
-const hasPermission = (roles: string[], route: RouteRecordRaw) => {
+const hasPermission = (roleName: string, route: RouteRecordRaw) => {
   if (route.meta && route.meta.roles) {
-    if (roles.includes('ROOT')) {
-      return true;
-    }
-    return roles.some(role => {
       if (route.meta?.roles !== undefined) {
-        return (route.meta.roles as string[]).includes(role);
+        return (route.meta.roles as string[]).includes(roleName);
       }
-    });
   }
   return false;
 };
 
-const filterAsyncRoutes = (routes: RouteRecordRaw[], roles: string[]) => {
+const filterAsyncRoutes = (routes: RouteRecordRaw[], roleName: string) => {
   const res: RouteRecordRaw[] = [];
   routes.forEach(route => {
     const tmp = { ...route } as any;
-    if (hasPermission(roles, tmp)) {
+    if (hasPermission(roleName, tmp)) {
       if (tmp.component == 'Layout') {
         tmp.component = Layout;
       } else {
@@ -40,7 +35,7 @@ const filterAsyncRoutes = (routes: RouteRecordRaw[], roles: string[]) => {
       res.push(tmp);
 
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles);
+        tmp.children = filterAsyncRoutes(tmp.children, roleName);
       }
     }
   });
@@ -56,21 +51,25 @@ export const usePermissionStore = defineStore('permission', () => {
   // actions
   function setRoutes(newRoutes: RouteRecordRaw[]) {
     addRoutes.value = newRoutes;
+    console.log('constantRoutes: ',constantRoutes)
     routes.value = constantRoutes.concat(newRoutes);
   }
 
-  function generateRoutes(roles: string[]) {
+  function generateRoutes(roleName: string) {
     return new Promise<RouteRecordRaw[]>((resolve, reject) => {
-      listRoutes()
-        .then(response => {
-          const asyncRoutes = response.data;
-          const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
-          setRoutes(accessedRoutes);
-          resolve(accessedRoutes);
-        })
-        .catch(error => {
-          reject(error);
-        });
+      const accessedRoutes = filterAsyncRoutes(constantRoutes, roleName);
+      setRoutes(accessedRoutes);
+      resolve(accessedRoutes);
+      // listRoutes()
+      //   .then(response => {
+      //     const asyncRoutes = response.data;
+      //     const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
+      //     setRoutes(accessedRoutes);
+      //     resolve(accessedRoutes);
+      //   })
+      //   .catch(error => {
+      //     reject(error);
+      //   });
     });
   }
   return { routes, setRoutes, generateRoutes };
