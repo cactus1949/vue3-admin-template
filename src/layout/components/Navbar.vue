@@ -8,6 +8,8 @@ import Breadcrumb from '@/components/Breadcrumb/index.vue';
 import Screenfull from '@/components/Screenfull/index.vue';
 import SizeSelect from '@/components/SizeSelect/index.vue';
 import LangSelect from '@/components/LangSelect/index.vue';
+import BigSearch from '@/components/BigSearch/index.vue';
+import Greetings from '@/components/Greetings/index.vue';
 import MixNav from './Sidebar/MixNav.vue';
 import { CaretBottom } from '@element-plus/icons-vue';
 
@@ -32,37 +34,33 @@ const device = computed(() => appStore.device);
 <template>
   <div class="navbar">
     <div
-      class="flex justify-start"
-      v-if="device === 'mobile' || settingsStore.layout === 'left'"
+      v-if="settingsStore.layout === 'left'"
+      class="w-[100%] flex justify-between"
     >
-      <!-- 面包屑导航栏 -->
-      <breadcrumb />
-    </div>
-
-    <mix-nav v-if="device !== 'mobile' && settingsStore.layout === 'mix'" />
-
-    <div
-      v-if="device === 'mobile' || settingsStore.layout === 'left'"
-      class="flex justify-start"
-    >
-      <div v-if="device !== 'mobile'" class="flex justify-center items-center">
-
-        <!--语言选择-->
+      <div class="flex">
+        <!-- 大搜索 -->
+        <big-search />
+        <!-- 语言选择 -->
         <lang-select />
       </div>
-
-
+      <greetings />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variables.module.scss';
 .el-dropdown {
   font-size: 18px;
 }
-
 .navbar {
-  height: 50px;
+  // height: 50px;
+  padding: 0 70px;
+  height: $navBarHeight;
+  // z-index: 9999;
+  // width: calc(100vw - $sideBarWidth);
+  background-color: $mainBgColor;
+  // position: fixed;
   display: flex;
   align-items: center;
   justify-content: space-between;

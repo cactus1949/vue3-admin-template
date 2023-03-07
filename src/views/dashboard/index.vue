@@ -16,7 +16,7 @@ import Team from './components/Team/index.vue';
 
 <template>
   <div class="dashboard-container">
-    <github-corner class="github-corner" />
+    <!-- <github-corner class="github-corner" /> -->
 
     <!-- 数据 -->
     <el-row :gutter="40" class="card-panel__col">
@@ -114,9 +114,10 @@ import Team from './components/Team/index.vue';
 </template>
 
 <style lang="scss" scoped>
+@import '@/styles/variables.module.scss';
 .dashboard-container {
   padding: 24px;
-  background-color: rgb(240, 242, 245);
+  background-color: $mainBgColor;
   position: relative;
 
   .github-corner {

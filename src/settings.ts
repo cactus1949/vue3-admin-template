@@ -13,7 +13,7 @@ const defaultSettings: DefaultSettings = {
   title: '海外用户关系管理系统',
   showSettings: false,
   tagsView: false,
-  fixedHeader: false,
+  fixedHeader: true,
   sidebarLogo: false,
   errorLog: 'production',
   layout: 'left',

@@ -1,3 +1,6 @@
+// background
+$mainBgColor: #FFFFFF;
+
 // sidebar
 $menuText: #61647C;
 $menuActiveText: #DBDCE4;
@@ -12,17 +15,26 @@ $subMenuHover: #001528;
 $sideBarWidth: 298px;
 
 // navBar
-$navBarHeight: 160px;
+$navBarHeight: 155px;
 
 // font
 $fontSmallSize: 14px;
 $fontNormalSize: 16px;
 $fontOneSize: 18px;
+$fontTwoSize: 24px;
 $fontTitleSize: 26px;
+
+$fontImportColor: #0E1050;
+$fontOneColor: #61647C;
+$fontNormalColor: #8892B1;
+$fontAidsColor: #B7C1DF;
+$fontLinkColor: #3661EC;
 
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
+  mainBgColor: $mainBgColor;
+
   menuText: $menuText;
   menuActiveText: $menuActiveText;
   subMenuActiveText: $subMenuActiveText;
@@ -36,6 +48,13 @@ $fontTitleSize: 26px;
   fontSmallSize: $fontSmallSize;
   fontNormalSize: $fontNormalSize;
   fontOneSize: $fontOneSize;
+  fontTwoSize: $fontTwoSize;
   fontTitleSize: $fontTitleSize;
+
+  fontImportColor: $fontImportColor;
+  fontOneColor: $fontOneColor;
+  fontNormalColor: $fontNormalColor;
+  fontAidsColor: $fontAidsColor;
+  fontLinkColor: $fontLinkColor;
   
 }
