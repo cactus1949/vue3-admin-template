@@ -1,15 +1,8 @@
 /**
  * 客户信息查询参数
  */
-// export interface CustomerQuery extends PageQuery {
-//     filterMap: CustomerFilterMap
-// }
-
-export interface CustomerQueryReturns {
-  pageIndex: string
-  pageSize: string
-  records: Customer[]
-  total: string
+export interface CustomerQuery extends PageQuery {
+    filterMap: CustomerFilterMap
 }
 
 export interface CustomerFilterMap {
@@ -38,7 +31,7 @@ export interface CustomerFilterMap {
 /**
  * 客户
  */
-export interface Customer {
+export interface CustomerTableItem {
     address: string
     attribute: number
     beginTime: any

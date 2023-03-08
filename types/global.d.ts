@@ -23,5 +23,12 @@ declare global {
     checked?: boolean;
     children?: OptionType[];
   };
+
+  export interface TableReturns<T> {
+    pageIndex: string
+    pageSize: string
+    records: T[]
+    total: string
+  }
 }
 export {};
