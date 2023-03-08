@@ -1,6 +1,6 @@
 declare global {
   interface PageQuery {
-    pageNum: number;
+    pageIndex: number;
     pageSize: number;
   }
   type TabItem<T> = {
@@ -17,8 +17,8 @@ declare global {
     visible: boolean;
   };
 
-  type OptionType = {
-    value: string;
+  type OptionType<T> = {
+    value: T;
     label: string;
     checked?: boolean;
     children?: OptionType[];

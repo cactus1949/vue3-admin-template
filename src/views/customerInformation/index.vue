@@ -8,7 +8,25 @@ export default {
 // components
 import Breadcrumb from '@/components/Breadcrumb/index.vue';
 import { Plus } from '@element-plus/icons-vue'
-import { reactive, ref, toRefs } from 'vue';
+import Pagination from '@/components/Pagination/index.vue';
+import { 
+  reactive, 
+  ref, 
+  toRefs, 
+  onMounted
+} from 'vue';
+import { ElTable, ElForm } from 'element-plus'
+
+// api
+import {
+  getCustomerList
+} from '@/api/customer'
+
+// types
+import {
+  Customer,
+  CustomerFilterMap
+} from '@/api/customer/types'
 
 //
 const state = reactive({
@@ -22,34 +40,264 @@ const state = reactive({
       name: '2'
     }
   ],
-  activeName: '1'
+  activeName: '1',
+  tableData: [
+    // {
+    //   "address": "lanzhou",
+    //   "attribute": 1,
+    //   "beginTime": null,
+    //   "blocCustomerId": null,
+    //   "blocCustomerName": "",
+    //   "bracheName": "曼谷分社",
+    //   "branchId": "1386864793350311937",
+    //   "circulation": null,
+    //   "contacts": [
+    //     {
+    //       "blocCustomerId": "[\"\"]",
+    //       "blocCustomerName": "[\"\"]",
+    //       "customerId": "[\"7017051212423901224\"]",
+    //       "customerName": "[\"1233214\"]",
+    //       "duties": "1",
+    //       "editedAuditStatus": null,
+    //       "email": [
+    //         "123@123.com"
+    //       ],
+    //       "englishName": "1",
+    //       "id": "1611285767855017985",
+    //       "name": "1",
+    //       "phoneNum": [
+    //         {
+    //           "extensionNum": "",
+    //           "phone": "18993882884"
+    //         }
+    //       ]
+    //     }
+    //   ],
+    //   "countryId": "1377269137451257859",
+    //   "countryName": "泰国",
+    //   "createTime": "2023-01-06 16:57:17",
+    //   "customerAttribute": 1,
+    //   "dau": null,
+    //   "description": "1",
+    //   "domainName": [
+    //     "{\"channelType\":1,\"domainUrl\":\"无\",\"key\":2772521822140.33}"
+    //   ],
+    //   "domains": [
+    //     {
+    //       "channelType": 1,
+    //       "domainUrl": "无"
+    //     }
+    //   ],
+    //   "downNum": null,
+    //   "editedAuditStatus": 0,
+    //   "endTime": null,
+    //   "englishName": "1",
+    //   "firstSignTimeStr": "",
+    //   "googleMapUrl": "",
+    //   "id": "7017051212423901224",
+    //   "isChineseInvested": false,
+    //   "isInfoCustomer": false,
+    //   "isOriginalDb": true,
+    //   "isProxy": false,
+    //   "isRoad": false,
+    //   "mainMedia": 1,
+    //   "minceCustomerAttribute": 1,
+    //   "monthPicNum": null,
+    //   "name": "1233214",
+    //   "phoneNum": [
+    //     "18993882884"
+    //   ],
+    //   "platformUserAreaName": [
+    //     "亚太地区"
+    //   ],
+    //   "products": [
+    //     {
+    //       "createTime": "2021-09-13 16:15:34",
+    //       "id": "1437329081525080065",
+    //       "index": null,
+    //       "language": "简体中文",
+    //       "languageId": "1386945353653424129",
+    //       "name": "国际特稿专线",
+    //       "normalPrice": "2400",
+    //       "quotedPrice": "",
+    //       "typeId": "1386944507981074433",
+    //       "typeName": "文字产品"
+    //     },
+    //     {
+    //       "createTime": "2021-09-13 16:15:53",
+    //       "id": "1437329162101854209",
+    //       "index": null,
+    //       "language": "简体中文",
+    //       "languageId": "1386945353653424129",
+    //       "name": "对外中文专线",
+    //       "normalPrice": "2400",
+    //       "quotedPrice": "",
+    //       "typeId": "1386944507981074433",
+    //       "typeName": "文字产品"
+    //     }
+    //   ]
+    // }
+  ] as Customer[],
+  total: 0,
+  pageQuery: {
+    pageIndex: 1,
+    pageSize: 10
+  } as PageQuery,
+  queryForm: {
+    customerName: "",
+    blocCustomerName: "",
+    productName: "",
+    countryName: "", // 国家/地区
+    areaName: "", 
+    isAgreement: "",
+    isAgreementMoney: "",
+    type: "",
+    classify: "",
+    attribute: "", // 合作方式
+    isProxy: "", // 是否通过代理
+    isEffective: "", // 有效客户
+    isInfoCustomer: "", // 纯信息用户
+    isChineseInvested: "", // 中资机构/华文媒体
+    sustainChinese: "", // 知华友华
+    isRoad: "",
+    branchId: "", // 分社名称
+    customerAttribute: "", // 客户属性
+    minceCustomerAttribute: "", // 细分属性
+    mainMedia: "" // 重要程度
+  } as CustomerFilterMap,
+  loading: false,
+  attributeList: [
+    {
+      label: '直接',
+      value: 1
+    },
+    {
+      label: '间接',
+      value: 0
+    },
+  ] as OptionType<number>[], // 合作方式 下拉选项
+  isTureList: [
+    {
+      label: '是',
+      value: true
+    },
+    {
+      label: '否',
+      value: false
+    }
+  ] as OptionType<boolean>[], // 是否 下拉选项（true false）
+  isEffectiveList: [
+    {
+      label: '有效',
+      value: true
+    },
+    {
+      label: '无效',
+      value: false
+    }
+  ] as OptionType<boolean>[], // 有效客户 下拉选项
+  sustainChineseList: [
+    {
+      label: '友华',
+      value: 2
+    },
+    {
+      label: '知华',
+      value: 1
+    },
+    {
+      label: '中立',
+      value: 3
+    },
+    {
+      label: '对立',
+      value: 4
+    },
+  ] as OptionType<number>[], // 知华友华 下拉选项
+  customerAttributeList: [
+    {
+      label: '媒体',
+      value: 1
+    },
+    {
+      label: '非媒体',
+      value: 2
+    },
+  ] as OptionType<number>[], // 客户属性 下拉选项
+  mainMediaList: [
+    {
+      label: '国际知名媒体/机构',
+      value: 1
+    },
+    {
+      label: '本国主流媒体/机构',
+      value: 2
+    },
+    {
+      label: '普通媒体/机构',
+      value: 3
+    },
+    {
+      label: '省级媒体/机构',
+      value: 4
+    },
+    {
+      label: '市级媒体/机构',
+      value: 5
+    },
+    {
+      label: '县级媒体/机构',
+      value: 6
+    },
+  ] as OptionType<number>[], // 重要程度 下拉选项
 });
+const { 
+  tabList, 
+  activeName, 
+  tableData,
+  pageQuery,
+  total,
+  loading,
+  queryForm,
+  isTureList,
+  isEffectiveList,
+  sustainChineseList,
+  mainMediaList,
+  customerAttributeList,
+  attributeList
+} = toRefs(state);
 
-import { ElTable } from 'element-plus'
 
+const queryFormRef = ref(ElForm); // 查询表单
 
-const currentPage4 = ref(4)
-const pageSize4 = ref(100)
-const small = ref(false)
-const background = ref(false)
-const disabled = ref(false)
-
-const handleSizeChange = (val: number) => {
-  console.log(`${val} items per page`)
+/**
+ * 查询
+ */
+function queryCustomer() {
+  state.loading = true;
+  getCustomerList({
+    filterMap: {
+      ...state.queryForm
+    },
+    ...state.pageQuery
+  }).then((res) => {
+    state.tableData = res.data.records;
+    state.total = +res.data.total;
+    state.loading = false;
+  });
 }
-const handleCurrentChange = (val: number) => {
-  console.log(`current page: ${val}`)
-}
 
-interface User {
-  date: string
-  name: string
-  address: string
+/**
+ * 重置
+ */
+function resetQueryCustomer(){
+  queryFormRef.value.resetFields();
+  queryCustomer()
 }
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const multipleSelection = ref<User[]>([])
-const toggleSelection = (rows?: User[]) => {
+const multipleSelection = ref<Customer[]>([])
+const toggleSelection = (rows?: Customer[]) => {
   if (rows) {
     rows.forEach((row) => {
       // TODO: improvement typing when refactor table
@@ -61,51 +309,17 @@ const toggleSelection = (rows?: User[]) => {
     multipleTableRef.value!.clearSelection()
   }
 }
-const handleSelectionChange = (val: User[]) => {
+const handleSelectionChange = (val: Customer[]) => {
   multipleSelection.value = val
 }
 
-const tableData: User[] = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-08',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-06',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
-
-const { tabList, activeName } = toRefs(state);
 
 
+
+onMounted(() => {
+  // 初始化客户信息库 列表数据
+  queryCustomer()
+})
 </script>
 
 <template>
@@ -123,179 +337,233 @@ const { tabList, activeName } = toRefs(state);
     </el-tabs>
     <!-- 筛选 -->
     <div class="filter-container">
-      <el-row :gutter="16">
-        <el-col :span="3">
-          <el-input v-model="keyword" placeholder="客户名称" />
-        </el-col>
-        <el-col :span="3">
-          <el-input v-model="keyword" placeholder="客户名称" />
-        </el-col>
-        <el-col :span="3">
-          <el-input v-model="keyword" placeholder="客户名称" />
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            size="small"
-            v-model="attribute"
-            placeholder="国家/地区"
-            filterable
-          >
-            <el-option
-              :label="$t('Customer.DirectCooperation')"
-              :value="1"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <div class="search-btns flex justify-end">
-            <el-button type="search">搜索</el-button>
-            <el-button type="reset">重置</el-button>
-          </div>
-        </el-col>
-      </el-row>
+      <el-form :model="queryForm" ref="queryFormRef">
+        <el-row :gutter="16">
+          <!-- 客户名称 -->
+          <el-col :span="3">
+            <el-form-item prop="customerName">
+              <el-input v-model="queryForm.customerName" placeholder="客户名称" />
+            </el-form-item>
+          </el-col>
+          <!-- 集团客户名称 -->
+          <el-col :span="3">
+            <el-form-item prop="blocCustomerName">
+              <el-input v-model="queryForm.blocCustomerName" placeholder="集团客户名称" />
+            </el-form-item>
+          </el-col>
+          <!-- 产品名称 -->
+          <el-col :span="3">
+            <el-form-item prop="productName">
+              <el-input v-model="queryForm.productName" placeholder="产品名称" />
+            </el-form-item>
+          </el-col>
+          <!-- 国家/地区 -->
+          <el-col :span="3">
+            <el-form-item prop="countryName">
+              <el-select
+                class="w-[100%]"
+                size="small"
+                v-model="queryForm.countryName"
+                placeholder="国家/地区"
+                filterable
+              >
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 合作方式 -->
+          <el-col :span="3">
+            <el-form-item prop="attribute">
+              <el-select
+                size="small"
+                v-model="queryForm.attribute"
+                placeholder="合作方式"
+                filterable
+              >
+                <el-option
+                  v-for="item in attributeList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 是否通过代理 -->
+          <el-col :span="3">
+            <el-form-item prop="isProxy">
+              <el-select
+                size="small"
+                v-model="queryForm.isProxy"
+                placeholder="是否通过代理"
+                filterable
+              >
+                <el-option
+                  v-for="item in isTureList"
+                  :key="'isProxy'+item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 有效客户 -->
+          <el-col :span="3">
+            <el-form-item prop="isEffective">
+              <el-select
+                size="small"
+                v-model="queryForm.isEffective"
+                placeholder="有效客户"
+                filterable
+              >
+                <el-option
+                  v-for="item in isEffectiveList"
+                  :key="'isEffective'+item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 纯信息用户 -->
+          <el-col :span="3">
+            <el-form-item prop="isInfoCustomer">
+              <el-select
+                size="small"
+                v-model="queryForm.isInfoCustomer"
+                placeholder="纯信息用户"
+                filterable
+              >
+                <el-option
+                  v-for="item in isTureList"
+                  :key="'isInfoCustomer'+item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 知华友华 -->
+          <el-col :span="3">
+            <el-form-item prop="sustainChinese">
+              <el-select
+                size="small"
+                v-model="queryForm.sustainChinese"
+                placeholder="知华友华"
+                filterable
+              >
+                <el-option
+                  v-for="item in sustainChineseList"
+                  :key="'sustainChinese'+item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 客户属性 -->
+          <el-col :span="3">
+            <el-form-item prop="customerAttribute">
+              <el-select
+                size="small"
+                v-model="queryForm.customerAttribute"
+                placeholder="客户属性"
+                filterable
+              >
+                <el-option
+                  v-for="item in customerAttributeList"
+                  :key="'customerAttribute'+item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 分社名称 -->
+          <el-col :span="3">
+            <el-form-item prop="branchId">
+              <el-select
+                size="small"
+                v-model="queryForm.branchId"
+                placeholder="分社名称"
+                filterable
+              >
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 细分属性 -->
+          <el-col :span="3">
+            <el-form-item prop="minceCustomerAttribute">
+              <el-select
+                size="small"
+                v-model="queryForm.minceCustomerAttribute"
+                placeholder="细分属性"
+                filterable
+              >
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 重要程度 -->
+          <el-col :span="3">
+            <el-form-item prop="mainMedia">
+              <el-select
+                size="small"
+                v-model="queryForm.mainMedia"
+                placeholder="重要程度"
+                filterable
+              >
+                <el-option
+                  v-for="item in mainMediaList"
+                  :key="'mainMedia'+item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 中资机构/华文媒体 -->
+          <el-col :span="3">
+            <el-form-item prop="isChineseInvested">
+              <el-select
+                size="small"
+                v-model="queryForm.isChineseInvested"
+                placeholder="中资机构/华文媒体"
+                filterable
+              >
+                <el-option
+                  v-for="item in isTureList"
+                  :key="'isChineseInvested'+item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- 一带一路国家 -->
+          <el-col :span="3">
+            <el-form-item prop="isRoad">
+              <el-select
+                size="small"
+                v-model="queryForm.isRoad"
+                placeholder="一带一路国家"
+                filterable
+              >
+                <el-option
+                  v-for="item in isTureList"
+                  :key="'isRoad'+item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <div class="search-btns flex justify-end">
+              <el-button type="search" @click="queryCustomer">搜索</el-button>
+              <el-button type="reset" @click="resetQueryCustomer">重置</el-button>
+            </div>
+          </el-col>
+        </el-row>
+      </el-form>
     </div>
     <!-- 表格 -->
     <div class="table-header-container">
@@ -327,27 +595,27 @@ const { tabList, activeName } = toRefs(state);
     <el-table
       ref="multipleTableRef"
       :data="tableData"
+      v-loading="loading"
       stripe
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column label="Date">
+      <!-- <el-table-column label="Date">
         <template #default="scope">{{ scope.row.date }}</template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column property="name" label="Name" />
-      <el-table-column
+      <!-- <el-table-column
         property="address"
         label="Address"
         show-overflow-tooltip
-      />
+      /> -->
       <el-table-column fixed="right" label="操作" width="120">
         <template #default="scope">
           <el-button
             link
             type="primary"
             size="small"
-            @click.prevent="deleteRow(scope.$index)"
           >
             删除
           </el-button>
@@ -355,17 +623,11 @@ const { tabList, activeName } = toRefs(state);
       </el-table-column>
     </el-table>
     <div class="table-footer-container">
-      <el-pagination
-        v-model:current-page="currentPage4"
-        v-model:page-size="pageSize4"
-        :page-sizes="[100, 200, 300, 400]"
-        :small="small"
-        :disabled="disabled"
-        :background="background"
-        layout="->,total, sizes, prev, pager, next, jumper"
-        :total="400"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+      <Pagination
+        v-model:page="pageQuery.pageIndex"
+        v-model:limit="pageQuery.pageSize"
+        :total="total"
+        @pagination="queryCustomer"
       />
     </div>
   </div>
@@ -376,9 +638,6 @@ const { tabList, activeName } = toRefs(state);
 .app-container {
   .filter-container {
     padding-top: 20px;
-    .el-col {
-      margin-bottom: 20px;
-    }
   }
   .table-header-container{
     display: flex;
