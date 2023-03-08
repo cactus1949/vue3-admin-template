@@ -112,7 +112,13 @@
   .el-table__row{
     height: 64px;
   }
+  .el-table__header{
+    th{
+      color: #B7C1DF;
+    }
+  }
   .el-table__row td{
+    color: #0E1050;
     background-color: #F9FAFD !important;
   }
   .el-table__row.el-table__row--striped td{
@@ -122,6 +128,10 @@
 
 
 // el-button
+.el-button.is-link{
+  color: $fontLinkColor!important;
+  font-size: $fontSmallSize;
+}
 // 搜索
 .el-button--search.is-active,
 .el-button--search:active {
@@ -162,4 +172,14 @@
   color: $fontLinkColor!important;
   background-color: #FFF!important;
   border-color: $fontLinkColor!important;
+}
+
+// el-pagination
+.el-pagination{
+  .el-pager{
+    .is-active{
+      background-color: #BCC2D3!important;
+      color: #FFFFFF;
+    }
+  }
 }

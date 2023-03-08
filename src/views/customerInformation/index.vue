@@ -42,103 +42,7 @@ const state = reactive({
     }
   ],
   activeName: '1',
-  tableData: [
-    // {
-    //   "address": "lanzhou",
-    //   "attribute": 1,
-    //   "beginTime": null,
-    //   "blocCustomerId": null,
-    //   "blocCustomerName": "",
-    //   "bracheName": "曼谷分社",
-    //   "branchId": "1386864793350311937",
-    //   "circulation": null,
-    //   "contacts": [
-    //     {
-    //       "blocCustomerId": "[\"\"]",
-    //       "blocCustomerName": "[\"\"]",
-    //       "customerId": "[\"7017051212423901224\"]",
-    //       "customerName": "[\"1233214\"]",
-    //       "duties": "1",
-    //       "editedAuditStatus": null,
-    //       "email": [
-    //         "123@123.com"
-    //       ],
-    //       "englishName": "1",
-    //       "id": "1611285767855017985",
-    //       "name": "1",
-    //       "phoneNum": [
-    //         {
-    //           "extensionNum": "",
-    //           "phone": "18993882884"
-    //         }
-    //       ]
-    //     }
-    //   ],
-    //   "countryId": "1377269137451257859",
-    //   "countryName": "泰国",
-    //   "createTime": "2023-01-06 16:57:17",
-    //   "customerAttribute": 1,
-    //   "dau": null,
-    //   "description": "1",
-    //   "domainName": [
-    //     "{\"channelType\":1,\"domainUrl\":\"无\",\"key\":2772521822140.33}"
-    //   ],
-    //   "domains": [
-    //     {
-    //       "channelType": 1,
-    //       "domainUrl": "无"
-    //     }
-    //   ],
-    //   "downNum": null,
-    //   "editedAuditStatus": 0,
-    //   "endTime": null,
-    //   "englishName": "1",
-    //   "firstSignTimeStr": "",
-    //   "googleMapUrl": "",
-    //   "id": "7017051212423901224",
-    //   "isChineseInvested": false,
-    //   "isInfoCustomer": false,
-    //   "isOriginalDb": true,
-    //   "isProxy": false,
-    //   "isRoad": false,
-    //   "mainMedia": 1,
-    //   "minceCustomerAttribute": 1,
-    //   "monthPicNum": null,
-    //   "name": "1233214",
-    //   "phoneNum": [
-    //     "18993882884"
-    //   ],
-    //   "platformUserAreaName": [
-    //     "亚太地区"
-    //   ],
-    //   "products": [
-    //     {
-    //       "createTime": "2021-09-13 16:15:34",
-    //       "id": "1437329081525080065",
-    //       "index": null,
-    //       "language": "简体中文",
-    //       "languageId": "1386945353653424129",
-    //       "name": "国际特稿专线",
-    //       "normalPrice": "2400",
-    //       "quotedPrice": "",
-    //       "typeId": "1386944507981074433",
-    //       "typeName": "文字产品"
-    //     },
-    //     {
-    //       "createTime": "2021-09-13 16:15:53",
-    //       "id": "1437329162101854209",
-    //       "index": null,
-    //       "language": "简体中文",
-    //       "languageId": "1386945353653424129",
-    //       "name": "对外中文专线",
-    //       "normalPrice": "2400",
-    //       "quotedPrice": "",
-    //       "typeId": "1386944507981074433",
-    //       "typeName": "文字产品"
-    //     }
-    //   ]
-    // }
-  ] as Customer[],
+  tableData: [] as Customer[],
   total: 0,
   pageQuery: {
     pageIndex: 1,
@@ -615,18 +519,19 @@ onMounted(() => {
       ref="multipleTableRef"
       :data="tableData"
       v-loading="loading"
+      height="500px"
       stripe
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column property="name" label="客户名称" fixed width="200"/>
-      <el-table-column property="englishName" label="外文名称" width="200" />
+      <el-table-column property="name" show-overflow-tooltip label="客户名称" fixed width="200"/>
+      <el-table-column property="englishName" show-overflow-tooltip label="外文名称" width="200" />
       <el-table-column property="editedAuditStatus" label="状态" width="200">
         <template #default="scope">{{ editedAuditStatusList[scope.row.editedAuditStatus] }}</template>
       </el-table-column>
       <el-table-column property="countryName" label="国家/地区" width="200" />
-      <el-table-column property="name" label="联系人" width="200" />
+      <el-table-column property="name" show-overflow-tooltip label="联系人" width="200" />
       <el-table-column property="products" label="产品名称" width="200" show-overflow-tooltip>
         <template #default="scope">{{ switchProducts(scope.row.products) }}</template>
       </el-table-column>
@@ -646,13 +551,6 @@ onMounted(() => {
             size="small"
           >
             编辑
-          </el-button>
-          <el-button
-            link
-            type="primary"
-            size="small"
-          >
-            删除
           </el-button>
         </template>
       </el-table-column>
