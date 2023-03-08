@@ -28,7 +28,7 @@ svg{
 .sidebar-container{
   .el-menu-item{
     font-size: $fontNormalSize;
-    padding-left: 70px!important;
+    padding-left: min(74px,3.85vw)!important;
     .svg-icon{
       font-size: $fontOneSize;
     }
