@@ -25,7 +25,8 @@ import {
 // types
 import {
   Customer,
-  CustomerFilterMap
+  CustomerFilterMap,
+  Product
 } from '@/api/customer/types'
 
 //
@@ -250,6 +251,11 @@ const state = reactive({
       value: 6
     },
   ] as OptionType<number>[], // 重要程度 下拉选项
+  editedAuditStatusList: [
+    "", 
+    "已修改，待审核", 
+    "已修改，未提交"
+  ] as string[], // 客户状态
 });
 const { 
   tabList, 
@@ -264,6 +270,7 @@ const {
   sustainChineseList,
   mainMediaList,
   customerAttributeList,
+  editedAuditStatusList,
   attributeList
 } = toRefs(state);
 
@@ -293,6 +300,18 @@ function queryCustomer() {
 function resetQueryCustomer(){
   queryFormRef.value.resetFields();
   queryCustomer()
+}
+
+/**
+ * switchProducts
+ * 
+ */
+function switchProducts(products?: Product[]):string{
+  if(products?.length){
+    return products.map(o=>o.name).join(',')
+  }else{
+    return ''
+  }
 }
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
@@ -601,17 +620,33 @@ onMounted(() => {
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" />
-      <!-- <el-table-column label="Date">
-        <template #default="scope">{{ scope.row.date }}</template>
-      </el-table-column> -->
-      <el-table-column property="name" label="Name" />
-      <!-- <el-table-column
-        property="address"
-        label="Address"
-        show-overflow-tooltip
-      /> -->
-      <el-table-column fixed="right" label="操作" width="120">
+      <el-table-column property="name" label="客户名称" fixed width="200"/>
+      <el-table-column property="englishName" label="外文名称" width="200" />
+      <el-table-column property="editedAuditStatus" label="状态" width="200">
+        <template #default="scope">{{ editedAuditStatusList[scope.row.editedAuditStatus] }}</template>
+      </el-table-column>
+      <el-table-column property="countryName" label="国家/地区" width="200" />
+      <el-table-column property="name" label="联系人" width="200" />
+      <el-table-column property="products" label="产品名称" width="200" show-overflow-tooltip>
+        <template #default="scope">{{ switchProducts(scope.row.products) }}</template>
+      </el-table-column>
+      <el-table-column property="blocCustomerName" label="集团客户名称" width="200" />
+      <el-table-column fixed="right" label="操作" width="200">
         <template #default="scope">
+          <el-button
+            link
+            type="primary"
+            size="small"
+          >
+            查看
+          </el-button>
+          <el-button
+            link
+            type="primary"
+            size="small"
+          >
+            编辑
+          </el-button>
           <el-button
             link
             type="primary"
